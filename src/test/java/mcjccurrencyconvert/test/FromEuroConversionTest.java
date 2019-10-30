@@ -2,14 +2,20 @@ package mcjccurrencyconvert.test;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class FromEuroConversionTest {
+import mcjccurrencyconvert.FromEuroConversion;
 
+public class FromEuroConversionTest {
+	FromEuroConversion classUnderTest;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -27,8 +33,14 @@ public class FromEuroConversionTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testFromEuroConvertsCorrectly() {
+		classUnderTest = new FromEuroConversion();
+		BigDecimal amount = new BigDecimal(1000);
+		BigDecimal rate = new BigDecimal(1.1102);
+		BigDecimal expected = amount.multiply(rate).setScale(2,RoundingMode.CEILING);
+		so
+		assertTrue(expected.equals(classUnderTest.convert(amount,rate)));
+		 
 	}
 
 }
