@@ -1,5 +1,7 @@
 package mcjccurrencyconvert;
 
-public interface Conversion {
+import java.math.BigDecimal;
 
+public interface Conversion {
+	BigDecimal convert(BigDecimal amount,BigDecimal conversionRate);
 }
