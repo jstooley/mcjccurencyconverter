@@ -1,19 +1,33 @@
 package mcjccurrencyconvert;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class CommandLineInterface {
 
-	BigDecimal num;
-	String input;
-	String input2;
+	// private Scanner scan;
 
-	public BigDecimal getNum() {
+	private String num;
+	private String input;
+	private String input2;
+
+	private UserInput userinput;
+
+	public CommandLineInterface() {
+		super();
+	}
+
+	public CommandLineInterface(UserInput userinput) {
+		super();
+		this.userinput = userinput;
+	}
+
+	public String getNum() {
 		return num;
 	}
 
-	public void setNum(BigDecimal num) {
+	public void setNum(String num) {
 		this.num = num;
 	}
 
@@ -34,15 +48,15 @@ public class CommandLineInterface {
 	}
 
 	public BigDecimal getAmount() {
-		Scanner scan = new Scanner(System.in);
-
+		num = userinput.getInput(System.in);
 		System.out.println("Amount?");
-		num = scan.nextBigDecimal();
 
-		scan.close();
+		if (!num.matches("(^)?\\d+(\\.\\d+)?")) {
+			System.out.println("invalid");
+		}
+		BigDecimal realnum = new BigDecimal(num);
 
-		return num;
-
+		return realnum;
 	}
 
 	public String getCurrencyFrom() {
