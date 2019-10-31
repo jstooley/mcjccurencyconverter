@@ -36,9 +36,8 @@ public class FromEuroConversionTest {
 	public void testFromEuroConvertsCorrectly() {
 		classUnderTest = new FromEuroConversion();
 		BigDecimal amount = new BigDecimal(1000);
-		BigDecimal rate = new BigDecimal(1.1102);
-		BigDecimal expected = amount.multiply(rate).setScale(2,RoundingMode.CEILING);
-		so
+		BigDecimal rate = new BigDecimal(1.110234);
+		BigDecimal expected = amount.multiply(rate).setScale(2, RoundingMode.HALF_UP);
 		assertTrue(expected.equals(classUnderTest.convert(amount,rate)));
 		 
 	}
