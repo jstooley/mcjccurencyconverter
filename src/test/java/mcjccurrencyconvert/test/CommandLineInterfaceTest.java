@@ -21,7 +21,7 @@ import mcjccurrencyconvert.UserInput;
 public class CommandLineInterfaceTest {
 
 	CommandLineInterface classUnderTest;
-
+	String simulateUser;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -41,43 +41,35 @@ public class CommandLineInterfaceTest {
 	@Test
 	public void testCommandLineInterfaceGetsAndStoresAmount() {
 		// arrange
-		UserInput mockUserInput = mock(UserInput.class);
-		classUnderTest = new CommandLineInterface(mockUserInput);
-		InputStream inputStream = new ByteArrayInputStream("10000".getBytes());
-
+		simulateUser = "150";
+		classUnderTest = new CommandLineInterface();
+		BigDecimal expected = new BigDecimal("150");
 		// act
-		classUnderTest.getAmount();
-
+		BigDecimal actual = classUnderTest.getAmount(new ByteArrayInputStream(simulateUser.getBytes()));
+		assertEquals(expected, actual);
 		// assure
-		verify(mockUserInput).getInput(inputStream);
+		
 	}
 
 	@Test
 	public void testCommandLineInterfaceGetsAndStoresCurrencyFrom() {
 		// arrange
-		String input = "USD";
-		String input2 = "Euro";
-		BigDecimal num = new BigDecimal(0);
-		BigDecimal expected = new BigDecimal(0);
-
-		// act
-		String actual = classUnderTest.getCurrencyFrom();
-
-		// assure
+		simulateUser = "USD";
+		classUnderTest = new CommandLineInterface();
+		String expected = "USD";
+		String actual = classUnderTest.getCurrencyFrom(new ByteArrayInputStream(simulateUser.getBytes()));
+	// assure
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	public void testCommandLineInterfaceGetsAndStoresCurrencyTo() {
 		// arrange
-		String input = "USD";
-		String input2 = "Euro";
-		BigDecimal num = new BigDecimal(0);
-		BigDecimal expected = new BigDecimal(0);
-
+		simulateUser = "USD";
+		classUnderTest = new CommandLineInterface();
+		String expected = "USD";
 		// act
-		String actual = classUnderTest.getCurrencyTo();
-
+		String actual = classUnderTest.getCurrencyTo(new ByteArrayInputStream(simulateUser.getBytes()));
 		// assure
 		assertEquals(expected, actual);
 	}

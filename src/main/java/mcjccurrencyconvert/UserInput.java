@@ -1,6 +1,7 @@
 package mcjccurrencyconvert;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -10,6 +11,5 @@ public class UserInput {
 	public String getInput(InputStream inputStream) {
 		scan = new Scanner(inputStream);
 		return scan.nextLine();
-		
 	}
 }

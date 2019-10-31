@@ -84,7 +84,8 @@ public class ConversionRates {
 	}
 
 	public BigDecimal getConversionRate(String currencyName) {
-		return conversionRates.get(currencyName);
+		BigDecimal amount = conversionRates.get(currencyName);
+		return amount;
 	}
 	
 	public void setConversionRates(Map<String, BigDecimal> map) {

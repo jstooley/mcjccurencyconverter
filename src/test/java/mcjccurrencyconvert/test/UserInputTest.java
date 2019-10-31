@@ -34,9 +34,8 @@ public class UserInputTest {
 	@Test
 	public void testGetInputReturnsCorrectValue() {
 		classUnderTest = new UserInput();
-		InputStream inputStream = new ByteArrayInputStream("10000".getBytes());
 		String expected = "10000";
-		assertTrue(expected.compareTo(classUnderTest.getInput(inputStream)) == 0);
+		assertTrue(expected.compareTo(classUnderTest.getInput(new ByteArrayInputStream("10000".getBytes()))) == 0);
 	}
 	
 }

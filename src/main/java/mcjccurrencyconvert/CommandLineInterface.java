@@ -6,11 +6,10 @@ import java.util.Scanner;
 
 public class CommandLineInterface {
 
-	// private Scanner scan;
 
-	private String num;
-	private String input;
-	private String input2;
+	private BigDecimal num;
+	private String Toinput;
+	private String Frominput;
 
 	private UserInput userinput;
 
@@ -23,63 +22,52 @@ public class CommandLineInterface {
 		this.userinput = userinput;
 	}
 
-	public String getNum() {
+	public BigDecimal getNum() {
 		return num;
 	}
 
-	public void setNum(String num) {
-		this.num = num;
+	public String getToInput() {
+		return Toinput;
 	}
 
-	public String getInput() {
-		return input;
+	public String getFromInput() {
+		return Frominput;
 	}
 
-	public void setInput(String input) {
-		this.input = input;
-	}
-
-	public String getInput2() {
-		return input2;
-	}
-
-	public void setInput2(String input2) {
-		this.input2 = input2;
-	}
-
-	public BigDecimal getAmount() {
-		num = userinput.getInput(System.in);
-		System.out.println("Amount?");
-
-		if (!num.matches("(^)?\\d+(\\.\\d+)?")) {
+	public BigDecimal getAmount(InputStream input) {
+		Scanner kb = new Scanner(input);
+		
+		System.out.println("Please enter the amount of money you have: ");
+		String amount = kb.nextLine();
+		if (!amount.matches("(^)?\\d+(\\.\\d+)?")) {
 			System.out.println("invalid");
+			System.exit(0);
 		}
-		BigDecimal realnum = new BigDecimal(num);
-
-		return realnum;
+		num = new BigDecimal(amount);
+        
+		return num;
 	}
 
-	public String getCurrencyFrom() {
-		Scanner scan = new Scanner(System.in);
+	public String getCurrencyFrom(InputStream input) {
+		Scanner scan = new Scanner(input);
 
 		System.out.println("What would you like to convert from?");
-		input2 = scan.nextLine();
+		Frominput = scan.next();
+		
 
-		scan.close();
-
-		return input2;
+		return Frominput;
 
 	}
 
-	public String getCurrencyTo() {
-		Scanner scan = new Scanner(System.in);
+	public String getCurrencyTo(InputStream input) {
+		Scanner scan = new Scanner(input);
 
 		System.out.println("What would you like to convert to?");
-		input = scan.nextLine();
+		Toinput = scan.next();
 
 		scan.close();
 
-		return input;
+		return Toinput;
 
 	}
 
