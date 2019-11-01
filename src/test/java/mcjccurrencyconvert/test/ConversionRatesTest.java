@@ -92,7 +92,7 @@ public class ConversionRatesTest {
 	public void test_ConversionRates_ReadConversionRates_CallsSetConversionRates() {
 		classUnderTest = new ConversionRates();
 		String key = "USD";
-		BigDecimal value = new BigDecimal("1.1154");
+		BigDecimal value = new BigDecimal("1.1139");
 		Map<String, BigDecimal> mockMap = mock(Map.class);
 		Optional<InputStream> input = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
 		Optional<Document> outcome = classUnderTest.parseXMLDocument(input.get());

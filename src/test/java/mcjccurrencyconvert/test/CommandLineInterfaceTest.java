@@ -62,6 +62,16 @@ public class CommandLineInterfaceTest {
 		// assert
 		assertEquals(expected, actual.get());
 	}
+	@Test
+	public void testCommandLineInterfaceKnowsInvalidAmount() {
+		// arrange
+		simulateUser = "0";
+		// act
+		Optional<BigDecimal> actual = classUnderTest.getAmount(new ByteArrayInputStream(simulateUser.getBytes()));
+		// assert
+		assertFalse(actual.isPresent());
+	}
+
 
 	@Test
 	public void testCommandLineInterfaceGetsAndStoresCurrencyFrom() {
@@ -72,6 +82,16 @@ public class CommandLineInterfaceTest {
 		String actual = classUnderTest.getCurrencyFrom(new ByteArrayInputStream(simulateUser.getBytes())).get();
 		// assert
 		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testCommandLineInterfaceKnowsInvalidFromInput() {
+		// arrange
+		simulateUser = "BARF";
+		// act
+		Optional<String> actual = classUnderTest.getCurrencyFrom(new ByteArrayInputStream(simulateUser.getBytes()));
+		// assert
+		assertFalse(actual.isPresent());
 	}
 
 	@Test
@@ -84,5 +104,16 @@ public class CommandLineInterfaceTest {
 		// assert
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void testCommandLineInterfaceKnowsInvalidToInput() {
+		// arrange
+		simulateUser = "BARF";
+		// act
+		Optional<String> actual = classUnderTest.getCurrencyTo(new ByteArrayInputStream(simulateUser.getBytes()));
+		// assert
+		assertFalse(actual.isPresent());
+	}
+
 
 }
