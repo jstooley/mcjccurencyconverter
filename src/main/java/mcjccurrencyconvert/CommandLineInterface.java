@@ -12,11 +12,13 @@ public class CommandLineInterface {
 	private BigDecimal num;
 	private String toInput;
 	private String fromInput;
-
 	private UserInput userinput;
+	private Map<String, BigDecimal> conversionRates;
 
-	public CommandLineInterface() {
+	public CommandLineInterface(Map<String, BigDecimal> conversionRates) {
 		super();
+		this.conversionRates = conversionRates;
+		
 	}
 
 	public CommandLineInterface(UserInput userinput) {
@@ -45,7 +47,7 @@ public class CommandLineInterface {
 	 */
 	public Optional<BigDecimal> getAmount(InputStream input) {
 		Scanner kb = new Scanner(input);
-		System.out.println("Please enter the amount of money you have: ");
+		System.out.println("Please enter the amount of money you would like to convert: ");
 		String amount = kb.nextLine();
 		
 		// checks to see if the input given was a digit.
@@ -67,17 +69,17 @@ public class CommandLineInterface {
 	 * @return
 	 * A type of currency or null if input is incorrect.
 	 */
-	public Optional<String> getCurrencyFrom(InputStream input, Map<String, BigDecimal> conversionRates) {
+	public Optional<String> getCurrencyFrom(InputStream input) {
 		Scanner scan = new Scanner(input);
 		System.out.println("What would you like to convert from?");
 		fromInput = scan.next();
 		
-		// TODO: Create a check to see if the input is a valid choice from conversionRates
-		if (!(conversionRates.containsKey(fromInput))) {
-			System.out.println("Invalid input please enter currency type!");
-			return Optional.empty();
+		if ((conversionRates.containsKey(fromInput)) || fromInput.equals("EUR")) {
+			return Optional.ofNullable(fromInput);
 		}
-		return Optional.ofNullable(fromInput);
+		System.out.println("Invalid input please enter currency type!");
+		printRates();
+		return Optional.empty();
 	}
 
 	/**
@@ -89,19 +91,36 @@ public class CommandLineInterface {
 	 * @return
 	 * A type of currency or null if input is incorrect.
 	 */
-	public Optional<String> getCurrencyTo(InputStream input, Map<String, BigDecimal> conversionRates) {
+	public Optional<String> getCurrencyTo(InputStream input) {
 		Scanner scan = new Scanner(input);
 		System.out.println("What would you like to convert to?");
 		toInput = scan.next();
-		
-		// TODO: Create a check to see if the input is a valid choice from conversionRates
-		if (!(conversionRates.containsKey(fromInput))) {
-			System.out.println("Invalid input please enter currency type!");
-			return Optional.empty();
+		if (conversionRates.containsKey(toInput) || toInput.equals("EUR")) {
+			scan.close();
+			return Optional.ofNullable(toInput);
 		}
 		scan.close();
-
-		return Optional.ofNullable(toInput);
+		System.out.println("Invalid input please enter currency type!");
+		printRates();
+		return Optional.empty();
+	}
+	
+	public void printRates() {
+		int count = 1;
+		System.out.println();
+		for (String currency : conversionRates.keySet()) {
+			if (count == 1) {
+				System.out.print(currency + " ");
+				count++;
+			} else if (count % 4 == 0) {
+				System.out.println(currency + " ");
+				count++;
+			} else {
+				System.out.print(currency + " ");
+				count++;
+			}
+		}
+		System.out.println();
 	}
 
 }

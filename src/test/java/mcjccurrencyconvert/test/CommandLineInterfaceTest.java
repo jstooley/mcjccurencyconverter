@@ -7,6 +7,8 @@ import static org.mockito.Mockito.verify;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.junit.After;
@@ -16,14 +18,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import mcjccurrencyconvert.CommandLineInterface;
+import mcjccurrencyconvert.ConversionRates;
 import mcjccurrencyconvert.UserInput;
 
 public class CommandLineInterfaceTest {
 
 	CommandLineInterface classUnderTest;
 	String simulateUser;
+	ConversionRates rates;
+	Optional<InputStream> input;
+	Map<String, BigDecimal> checkRates;
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+
 	}
 
 	@AfterClass
@@ -32,6 +40,12 @@ public class CommandLineInterfaceTest {
 
 	@Before
 	public void setUp() throws Exception {
+		rates = new ConversionRates();
+		input = rates.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+		rates.parseXMLDocument(input.get());
+		rates.readConversionRates();
+		Map<String, BigDecimal> checkRates = rates.getConversionRates();
+		classUnderTest = new CommandLineInterface(checkRates);
 	}
 
 	@After
@@ -42,23 +56,21 @@ public class CommandLineInterfaceTest {
 	public void testCommandLineInterfaceGetsAndStoresAmount() {
 		// arrange
 		simulateUser = "150";
-		classUnderTest = new CommandLineInterface();
 		BigDecimal expected = new BigDecimal("150");
 		// act
-		BigDecimal actual = classUnderTest.getAmount(new ByteArrayInputStream(simulateUser.getBytes()));
-		assertEquals(expected, actual);
-		// assure
-		
+		Optional<BigDecimal> actual = classUnderTest.getAmount(new ByteArrayInputStream(simulateUser.getBytes()));
+		// assert
+		assertEquals(expected, actual.get());
 	}
 
 	@Test
 	public void testCommandLineInterfaceGetsAndStoresCurrencyFrom() {
 		// arrange
 		simulateUser = "USD";
-		classUnderTest = new CommandLineInterface();
 		String expected = "USD";
-		String actual = classUnderTest.getCurrencyFrom(new ByteArrayInputStream(simulateUser.getBytes()));
-	// assure
+		// act
+		String actual = classUnderTest.getCurrencyFrom(new ByteArrayInputStream(simulateUser.getBytes())).get();
+		// assert
 		assertEquals(expected, actual);
 	}
 
@@ -66,11 +78,10 @@ public class CommandLineInterfaceTest {
 	public void testCommandLineInterfaceGetsAndStoresCurrencyTo() {
 		// arrange
 		simulateUser = "USD";
-		classUnderTest = new CommandLineInterface();
 		String expected = "USD";
 		// act
-		String actual = classUnderTest.getCurrencyTo(new ByteArrayInputStream(simulateUser.getBytes()));
-		// assure
+		String actual = classUnderTest.getCurrencyTo(new ByteArrayInputStream(simulateUser.getBytes())).get();
+		// assert
 		assertEquals(expected, actual);
 	}
 

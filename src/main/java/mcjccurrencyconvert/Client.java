@@ -2,6 +2,7 @@ package mcjccurrencyconvert;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Optional;
 
 public class Client {
@@ -9,50 +10,52 @@ public class Client {
 	private Conversion conversion;
 	private BigDecimal conversionRate;
 	private BigDecimal originalAmount;
-	private int euroCount = 0;
+	private static final String EURO = "EUR";
+	
 	
 	public static void main(String[] args) {
 		Client client = new Client();
-		CommandLineInterface currencyConverter = new CommandLineInterface();
 		ConversionRates rates = new ConversionRates();
 		Optional<InputStream> input = rates.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
 		rates.parseXMLDocument(input.get());
 		rates.readConversionRates();
 		Map<String, BigDecimal> checkRates = rates.getConversionRates();
+		CommandLineInterface currencyConverter = new CommandLineInterface(checkRates);
+		Optional<BigDecimal> amount;
 		
-		BigDecimal amount = currencyConverter.getAmount(System.in).get();
-		client.setOriginalAmount(amount);
-		String currencyFrom = currencyConverter.getCurrencyFrom(System.in, checkRates).get();
-		String currencyTo = currencyConverter.getCurrencyTo(System.in, checkRates).get();
-		if (currencyFrom.equals("EUR")) {
-			client.addEuroCount();
+		do{
+			 amount = currencyConverter.getAmount(System.in);
+		} while(!amount.isPresent());
+		Optional<String> currencyFrom;
+		do{
+			currencyFrom = currencyConverter.getCurrencyFrom(System.in);
+		} while(!currencyFrom.isPresent());
+		client.setOriginalAmount(amount.get());
+		Optional<String> currencyTo;
+		do {
+			currencyTo = currencyConverter.getCurrencyTo(System.in);
+		} while(!currencyTo.isPresent());
+		
+		if (currencyFrom.equals(EURO)) {
+			if (currencyTo.equals(EURO)) {
+				System.out.println("Cannont convert a euro into euro!");
+				System.exit(1);
+			}
 			client.setConversion(new FromEuroConversion());
-			client.setConversionRate(rates.getConversionRate(currencyTo));
-		} else if (currencyTo.equals("EUR")) {
-			client.addEuroCount();
+			client.setConversionRate(rates.getConversionRate(currencyTo.get()));
+		} else if (currencyTo.equals(EURO)) {
 			client.setConversion(new ToEuroConversion());
-			client.setConversionRate(rates.getConversionRate(currencyFrom));
+			client.setConversionRate(rates.getConversionRate(currencyFrom.get()));
 		} else {
 			System.out.println("This transaction is not available please input Euro as one of the options!");
 			//TODO: add a list currencies function
 		}
-		if (client.getEuroCount() == 1) {
-			BigDecimal convertedAmount = client.getConversion().convert(amount, client.getConversionRate());
-			System.out.println("\nConverted from " + currencyFrom + " to " + currencyTo +
+		BigDecimal convertedAmount = client.getConversion().convert(amount.get(), client.getConversionRate());
+		System.out.println("\nConverted from " + currencyFrom + " to " + currencyTo +
 						   "\nAmount given: " + client.getOriginalAmount() + " " + currencyFrom + 
 						   "\nAmount recieved: " + convertedAmount + " " + currencyTo);
-		} else if (client.getEuroCount() > 1) {
-			System.out.println("Cannont convert a euro into euro!");
-		}
 	}
 	
-	public int getEuroCount() {
-		return this.euroCount;
-	}
-	public void addEuroCount() {
-		this.euroCount++;
-	}
-
 	public Conversion getConversion() {
 		return conversion;
 	}
