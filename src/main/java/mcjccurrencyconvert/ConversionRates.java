@@ -106,7 +106,12 @@ public class ConversionRates {
 			conversionRates.put(element.getAttributeValue("currency"), value);
 		}
 	}
-
+	
+	public Map<String, BigDecimal> getConversionRates() {
+		return conversionRates;
+		
+	}
+	
 	public BigDecimal getConversionRate(String currencyName) {
 		BigDecimal amount = conversionRates.get(currencyName);
 		return amount;
