@@ -27,14 +27,27 @@ import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 public class ConversionRates {
+	/** Holds the valuse of the currency and rate */
 	private Map<String, BigDecimal> conversionRates;
+	
+	/** Holds the information about the conversion rates from one currency to a Euro */
 	private Document xmlConversion;
-
+	
+	/**
+	 * A constructor for the conversion rates class that initializes a map and document.
+	 */
 	public ConversionRates() {
 		xmlConversion = null;
 		conversionRates = new HashMap<String, BigDecimal>();
 	}
 
+	/**
+	 * A method that returns an Optional InputStream based on a given url or file.
+	 * @param urlLocation
+	 * file or url location that needs to be input
+	 * @return
+	 * FileInputStream, InputStream, or null if one cannot be found.
+	 */
 	public Optional<InputStream> makeXMLDocument(String urlLocation) {
 		InputStream input = null;
 		if (urlLocation.equals("")) {
@@ -46,6 +59,7 @@ public class ConversionRates {
 			InputStream xml = xmlURL.openStream();
 			input = xml;
 		} catch (IOException e) {
+			// if the URL cannot be found then try to create a file.
 			File file = new File(urlLocation);
 			if (file.exists()) {
 				try {
@@ -53,27 +67,37 @@ public class ConversionRates {
 					input = newFile;
 				} catch (FileNotFoundException fne) {
 					fne.printStackTrace();
+					// throw and invalid argument exception because the url or file given was invalid.
 					throw new IllegalArgumentException("Invalid argument");
 				}
 			} else {
+				// throw and invalid argument exception because the url or file given was invalid.
 				throw new IllegalArgumentException("Invalid argument");
 			}
 		}
 		return Optional.ofNullable(input);
 	}
 
+	/**
+	 * A method that converts an inputStream into an XML document.
+	 * @param in
+	 * Input stream to be turned into an XML document.
+	 * @return
+	 * a Document or null if one cannot be created.
+	 */
 	public Optional<Document> parseXMLDocument(InputStream in) {
 		SAXBuilder builder = new SAXBuilder();
 		try {
 			xmlConversion = builder.build(in);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JDOMException e) {
+		} catch (IOException | JDOMException e) {
 			e.printStackTrace();
 		}
 		return Optional.ofNullable(xmlConversion);
 	}
-
+	
+	/**
+	 * A method that reads a currency and rate from an XML document into a map.
+	 */
 	public void readConversionRates() {
 		Element rootNode = xmlConversion.getRootElement();
 		List<Element> children = rootNode.getChild("Cube", null).getChild("Cube", null).getChildren();
