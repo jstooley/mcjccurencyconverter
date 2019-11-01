@@ -10,7 +10,7 @@ public class Client {
 	private Conversion conversion;
 	private BigDecimal conversionRate;
 	private BigDecimal originalAmount;
-	private String euro = "EURO";
+	private String euro = "EUR";
 	
 	public static void main(String[] args) {
 		Client client = new Client();
@@ -21,7 +21,6 @@ public class Client {
 		Map<String, BigDecimal> checkRates = rates.getConversionRates();
 		CommandLineInterface currencyConverter = new CommandLineInterface(checkRates);
 		Optional<BigDecimal> amount;
-		
 		do{
 			 amount = currencyConverter.getAmount(System.in);
 		} while(!amount.isPresent());
