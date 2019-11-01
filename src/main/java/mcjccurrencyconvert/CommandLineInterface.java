@@ -57,7 +57,10 @@ public class CommandLineInterface {
 		}
 		// creates a big decimal out of the given amount
 		num = new BigDecimal(amount);
-		return Optional.ofNullable(num);
+		if (num.compareTo(new BigDecimal("0")) > 0) {
+			return Optional.ofNullable(num);
+		}
+		return Optional.empty();
 	}
 	
 	/**

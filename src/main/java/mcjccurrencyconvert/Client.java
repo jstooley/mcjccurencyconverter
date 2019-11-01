@@ -10,8 +10,7 @@ public class Client {
 	private Conversion conversion;
 	private BigDecimal conversionRate;
 	private BigDecimal originalAmount;
-	private static final String EURO = "EUR";
-	
+	private String euro = "EURO";
 	
 	public static void main(String[] args) {
 		Client client = new Client();
@@ -36,14 +35,14 @@ public class Client {
 			currencyTo = currencyConverter.getCurrencyTo(System.in);
 		} while(!currencyTo.isPresent());
 		
-		if (currencyFrom.equals(EURO)) {
-			if (currencyTo.equals(EURO)) {
+		if (currencyFrom.get().equals(client.getEuro())) {
+			if (currencyTo.get().equals(client.getEuro())) {
 				System.out.println("Cannont convert a euro into euro!");
 				System.exit(1);
 			}
 			client.setConversion(new FromEuroConversion());
 			client.setConversionRate(rates.getConversionRate(currencyTo.get()));
-		} else if (currencyTo.equals(EURO)) {
+		} else if (currencyTo.get().equals(client.getEuro())) {
 			client.setConversion(new ToEuroConversion());
 			client.setConversionRate(rates.getConversionRate(currencyFrom.get()));
 		} else {
@@ -51,11 +50,15 @@ public class Client {
 			//TODO: add a list currencies function
 		}
 		BigDecimal convertedAmount = client.getConversion().convert(amount.get(), client.getConversionRate());
-		System.out.println("\nConverted from " + currencyFrom + " to " + currencyTo +
-						   "\nAmount given: " + client.getOriginalAmount() + " " + currencyFrom + 
-						   "\nAmount recieved: " + convertedAmount + " " + currencyTo);
+		System.out.println("\nConverted from " + currencyFrom.get() + " to " + currencyTo.get() +
+						   "\nAmount given: " + client.getOriginalAmount() + " " + currencyFrom.get() + 
+						   "\nAmount recieved: " + convertedAmount + " " + currencyTo.get());
 	}
 	
+	public String getEuro() {
+		return euro;
+	}
+
 	public Conversion getConversion() {
 		return conversion;
 	}
