@@ -53,7 +53,7 @@ public class Client {
 		BigDecimal convertedAmount = client.getConversion().convert(amount.get(), client.getConversionRate());
 		System.out.println("\nConverted from " + currencyFrom.get() + " to " + currencyTo.get() +
 						   "\nAmount given: " + client.getOriginalAmount() + " " + currencyFrom.get() + 
-						   "\nAmount recieved: " + convertedAmount + " " + currencyTo.get());
+						   "\nAmount received: " + convertedAmount + " " + currencyTo.get());
 	}
 	
 	public String getEuro() {
