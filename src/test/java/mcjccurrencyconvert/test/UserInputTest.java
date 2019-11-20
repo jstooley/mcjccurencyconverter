@@ -1,17 +1,11 @@
 package mcjccurrencyconvert.test;
 
-import static org.junit.Assert.*;
+import mcjccurrencyconvert.UserInput;
+import org.junit.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import mcjccurrencyconvert.UserInput;
+import static org.junit.Assert.assertTrue;
 
 public class UserInputTest {
 	UserInput classUnderTest;
@@ -35,7 +29,7 @@ public class UserInputTest {
 	public void testGetInputReturnsCorrectValue() {
 		classUnderTest = new UserInput();
 		String expected = "10000";
-		assertTrue(expected.compareTo(classUnderTest.getInput(new ByteArrayInputStream("10000".getBytes()))) == 0);
+		assertTrue(expected.compareTo((classUnderTest.getInput(new ByteArrayInputStream("10000".getBytes()))).get()) == 0);
 	}
 	
 }

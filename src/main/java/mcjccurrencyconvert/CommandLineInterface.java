@@ -47,19 +47,29 @@ public class CommandLineInterface {
 	 */
 	public Optional<BigDecimal> getAmount(InputStream input) {
 		Scanner kb = new Scanner(input);
+		String amount;
 		System.out.println("Please enter the amount of money you would like to convert: ");
-		String amount = kb.nextLine();
-		
+		if (kb.hasNextLine()) {
+			amount = kb.nextLine();
+		}else{
+			return Optional.empty();
+		}
+
 		// checks to see if the input given was a digit.
 		if (!amount.matches("(^)?\\d+(\\.\\d+)?")) {
-			System.out.println("Invalid input please enter an amount of moeny!");
-			return Optional.empty();
+			System.out.println("Invalid input please enter an amount of money!");
+			getAmount(input);
 		}
 		// creates a big decimal out of the given amount
 		num = new BigDecimal(amount);
+
+
 		if (num.compareTo(new BigDecimal("0")) > 0) {
 			return Optional.ofNullable(num);
-		}
+		}else{
+			System.out.println("Number must be greater than zero.");
+			getAmount(input);
+			}
 		return Optional.empty();
 	}
 	

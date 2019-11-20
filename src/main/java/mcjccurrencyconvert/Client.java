@@ -23,9 +23,9 @@ public class Client {
 		Map<String, BigDecimal> checkRates = rates.getConversionRates();
 		CommandLineInterface currencyConverter = new CommandLineInterface(checkRates);
 		Optional<BigDecimal> amount;
-		do{
-			 amount = currencyConverter.getAmount(System.in);
-		} while(!amount.isPresent());
+		do {
+			amount = currencyConverter.getAmount(System.in);
+		}while(!amount.isPresent());
 		Optional<String> currencyFrom;
 		do{
 			currencyFrom = currencyConverter.getCurrencyFrom(System.in);
