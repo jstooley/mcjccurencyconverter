@@ -48,10 +48,10 @@ public class ConversionRates {
 	 * @return
 	 * FileInputStream, InputStream, or null if one cannot be found.
 	 */
-	public Optional<InputStream> makeXMLDocument(String urlLocation) {
+	public InputStream makeXMLDocument(String urlLocation) {
 		InputStream input = null;
 		if (urlLocation.equals("")) {
-			return Optional.ofNullable(input);
+			return null;
 		}
 		URL xmlURL;
 		try {
@@ -75,7 +75,7 @@ public class ConversionRates {
 				throw new IllegalArgumentException("Invalid argument");
 			}
 		}
-		return Optional.ofNullable(input);
+		return input;
 	}
 
 	/**
@@ -85,14 +85,14 @@ public class ConversionRates {
 	 * @return
 	 * a Document or null if one cannot be created.
 	 */
-	public Optional<Document> parseXMLDocument(InputStream in) {
+	public Document parseXMLDocument(InputStream in) {
 		SAXBuilder builder = new SAXBuilder();
 		try {
 			xmlConversion = builder.build(in);
 		} catch (IOException | JDOMException e) {
 			e.printStackTrace();
 		}
-		return Optional.ofNullable(xmlConversion);
+		return xmlConversion;
 	}
 	
 	/**

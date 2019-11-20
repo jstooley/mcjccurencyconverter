@@ -17,8 +17,8 @@ public class Client {
 	public static void main(String[] args) {
 		Client client = new Client();
 		ConversionRates rates = new ConversionRates();
-		Optional<InputStream> input = rates.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
-		rates.parseXMLDocument(input.get());
+		InputStream input = rates.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+		rates.parseXMLDocument(input);
 		rates.readConversionRates();
 		Map<String, BigDecimal> checkRates = rates.getConversionRates();
 		CommandLineInterface currencyConverter = new CommandLineInterface(checkRates);
@@ -38,7 +38,7 @@ public class Client {
 		
 		if (currencyFrom.get().equals(client.getEuro())) {
 			if (currencyTo.get().equals(client.getEuro())) {
-				System.out.println("Cannont convert a euro into euro!");
+				System.out.println("Cannot convert a euro into euro!");
 				System.exit(1);
 			}
 			client.setConversion(new FromEuroConversion());
