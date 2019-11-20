@@ -12,7 +12,7 @@ public class CommandLineInterface {
 	private BigDecimal num;
 	private String toInput;
 	private String fromInput;
-	private UserInput userinput;
+	private UserInput userInput;
 	private Map<String, BigDecimal> conversionRates;
 
 	public CommandLineInterface(Map<String, BigDecimal> conversionRates) {
@@ -23,7 +23,7 @@ public class CommandLineInterface {
 
 	public CommandLineInterface(UserInput userinput) {
 		super();
-		this.userinput = userinput;
+		this.userInput = userinput;
 	}
 
 	public BigDecimal getNum() {
@@ -46,6 +46,7 @@ public class CommandLineInterface {
 	 * Amount of money user wants to convert.
 	 */
 	public Optional<BigDecimal> getAmount(InputStream input) {
+		
 		Scanner kb = new Scanner(input);
 		String amount;
 		System.out.println("Please enter the amount of money you would like to convert: ");
@@ -58,7 +59,7 @@ public class CommandLineInterface {
 		// checks to see if the input given was a digit.
 		if (!amount.matches("(^)?\\d+(\\.\\d+)?")) {
 			System.out.println("Invalid input please enter an amount of money!");
-			getAmount(input);
+			return getAmount(input);
 		}
 		// creates a big decimal out of the given amount
 		num = new BigDecimal(amount);
@@ -68,9 +69,8 @@ public class CommandLineInterface {
 			return Optional.ofNullable(num);
 		}else{
 			System.out.println("Number must be greater than zero.");
-			getAmount(input);
+			return getAmount(input);
 			}
-		return Optional.empty();
 	}
 	
 	/**
