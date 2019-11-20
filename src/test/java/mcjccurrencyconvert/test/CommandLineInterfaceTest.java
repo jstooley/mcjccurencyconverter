@@ -26,7 +26,7 @@ public class CommandLineInterfaceTest {
 	CommandLineInterface classUnderTest;
 	String simulateUser;
 	ConversionRates rates;
-	Optional<InputStream> input;
+	InputStream input;
 	Map<String, BigDecimal> checkRates;
 
 	@BeforeClass
@@ -42,7 +42,7 @@ public class CommandLineInterfaceTest {
 	public void setUp() throws Exception {
 		rates = new ConversionRates();
 		input = rates.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
-		rates.parseXMLDocument(input.get());
+		rates.parseXMLDocument(input);
 		rates.readConversionRates();
 		Map<String, BigDecimal> checkRates = rates.getConversionRates();
 		classUnderTest = new CommandLineInterface(checkRates);

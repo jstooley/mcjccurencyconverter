@@ -47,45 +47,45 @@ public class ConversionRatesTest {
 	@Test
 	public void test_ConversionRates_MakeConversionRates_ReturnsNullIfNoURLProvided() {
 		classUnderTest = new ConversionRates();
-		Optional<InputStream> expected = Optional.empty();
-		Optional<InputStream> actual = classUnderTest.makeXMLDocument("");
+		InputStream expected = null;
+		InputStream actual = classUnderTest.makeXMLDocument("");
 		assertEquals(expected, actual);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void test_ConversionRates_MakeConversionRates_InvalidInput() {
 		classUnderTest = new ConversionRates();
-		Optional<InputStream> input = classUnderTest.makeXMLDocument("invalid");
+		InputStream input = classUnderTest.makeXMLDocument("invalid");
 	}
 	
 	@Test 
 	public void test_ConversionRates_MakeXMLDocument_ReturnsInputStream() {
 		classUnderTest = new ConversionRates();
-		Optional<InputStream> outcome = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
-		assertTrue(outcome.isPresent());
+		InputStream outcome = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+		assertNotNull(outcome);
 	}
 	
 	@Test 
 	public void test_ConversionRates_MakeXMLDocument_ReturnsFileInputStream() {
 		classUnderTest = new ConversionRates();
-		Optional<InputStream> outcome = classUnderTest.makeXMLDocument("src/test/resources/testRates.xml");
-		assertTrue(outcome.get() instanceof FileInputStream);
+		InputStream outcome = classUnderTest.makeXMLDocument("src/test/resources/testRates.xml");
+		assertTrue(outcome instanceof FileInputStream);
 	}
 	
 	@Test 
 	public void test_ConversionRates_MakeXMLDocument_ReturnsURLInputStream() {
 		classUnderTest = new ConversionRates();
-		Optional<InputStream> outcome = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+		InputStream outcome = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
 		InputStream expected = null;
-		assertTrue(outcome.get() instanceof InputStream);
+		assertNotNull(outcome);
 	}	
 	
 	@Test 
 	public void test_ConversionRates_ParseXMLDocument_ReturnsDocumentGivenInputStream() {
 		classUnderTest = new ConversionRates();
-		Optional<InputStream> input = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
-		Optional<Document> outcome = classUnderTest.parseXMLDocument(input.get());
-		assertTrue(outcome.get() instanceof Document);
+		InputStream input = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+		Document outcome = classUnderTest.parseXMLDocument(input);
+		assertTrue(outcome instanceof Document);
 	}
 	
 	@Test
@@ -94,8 +94,8 @@ public class ConversionRatesTest {
 		String key = "USD";
 		BigDecimal value = new BigDecimal("1.1139");
 		Map<String, BigDecimal> mockMap = mock(Map.class);
-		Optional<InputStream> input = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
-		Optional<Document> outcome = classUnderTest.parseXMLDocument(input.get());
+		InputStream input = classUnderTest.makeXMLDocument("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+		Document outcome = classUnderTest.parseXMLDocument(input);
 		classUnderTest.setConversionRates(mockMap);
 		classUnderTest.readConversionRates();
 		verify(mockMap, times(1)).put(key, value);
